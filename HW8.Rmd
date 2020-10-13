@@ -1,0 +1,51 @@
+---
+title: "Zeyd Khalil HW8, October 15, 2020"
+output: pdf_document
+---
+
+```{r, warning=FALSE}
+library(tidyverse)
+```  
+
+# Exercise 1 - The following built-in datasets are not tidy. For each one, describe why it is not tidy and write out what the first five entries would look like once it is in a tidy format.
+
+> a. relig_income
+> b. billboard
+> c. us_rent_income
+
+```{r}
+head(relig_income, n = 5)
+```  
+
+> The reason why this data is not tidy is because the column headings are values and not variable names. In order to tidy this data, I would use count() in order to distribute the income intervals in each row, and count the number of cases in those intervals. The result would consist of 3 columns; religion, income interval, and count. That would significantly increase the number of rows, but decrease the number of columns. 
+
+```{r}
+head(billboard, n = 5)
+```  
+
+> The reason why this data is not tidy is the same as in the previous example, because most of the columns in this dataset are numerical values instead of variable names. In order to tidy this data, I would use count() in order to distribute the week number in each row, and count the number of cases in those intervals. The result would consist of 4 columns; artist, track, date entered, week number, and count. That would significantly increase the number of rows, but decrease the number of columns. 
+
+```{r}
+head(us_rent_income, n = 5)
+```  
+
+> The reason why this data is not tidy is because each observational unit is spread across multiple rows. In order to make this data tidy, what I would do is use mutate() in order to create a new column for rent. Once that's done, the first five entries of the data will consist of 5 columns and only one row per state; the columns will be GEOID, NAME, Income, Rent, and moe. 
+
+# Exercise 2 - Try on your own to do the same thing to table4b. 
+
+```{r}
+tidy4b <- table4b %>% pivot_longer(cols = c(`1999`, `2000`), names_to = "year", values_to = "cases")
+
+tidy4b
+```  
+
+# Exercise 3 - Tidy built-in dataset relig_income  
+
+```{r}
+tidy_relig_income <- relig_income %>% pivot_longer(cols = c(`<$10k`, `$10-20k`, `$20-30k`, `$30-40k`, `$40-50k`, `$50-75k`, `$75-100k`, `$100-150k`, `>150k`, `Don't know/refused`), names_to = "religion income", values_to = "count")
+
+tidy_relig_income
+```  
+
+# Exercise 4 - 
+
