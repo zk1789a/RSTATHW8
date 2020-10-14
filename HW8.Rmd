@@ -49,3 +49,87 @@ tidy_relig_income
 
 # Exercise 4 - 
 
+```{r}
+monkeymem <- read_csv("https://raw.githubusercontent.com/JaneWall/data_STAT412612/master/monkeymem.csv")
+
+tidy_monkeymem <- monkeymem %>% pivot_longer(cols = c(Week2, Week4, Week8, Week12, Week16), names_to = "Week", values_to = "percent")
+
+tidy_monkeymem
+```  
+
+# Exercise 5 - Tidy the fish_encounters dataset of fish spotting by monitoring stations. Make the NA into 0 using the option values_fill = list(seen = 0)
+
+```{r}
+tidy_fishencounters <- fish_encounters %>% pivot_wider(names_from = station, values_from = seen, values_fill = list(seen = 0))
+
+tidy_fishencounters
+```   
+
+# Exercise 6 - Spread the flowers1 data frame. Hint: use read_csv2() to read in the dataset.
+
+```{r}
+flowers1 <- read_csv2("https://raw.githubusercontent.com/JaneWall/data_STAT412612/master/flowers1.csv")
+
+spread_flowers1 <- flowers1 %>% pivot_wider(names_from = Variable, values_from = Value)
+
+spread_flowers1
+```  
+
+# Exercise 7 - Tidy the dataset flowers2.csv by turning the one column into 3 separate columns.
+
+```{r}
+flowers2 <- read_csv("https://raw.githubusercontent.com/JaneWall/data_STAT412612/master/flowers2.csv")
+
+sep_flowers2 <- flowers2 %>% separate(`Flowers/Intensity;Time`, into = c("Flowers", "Intensity", "Time"), sep = "/") %>% separate(Intensity, into = c("Intensity", "Time"))  
+
+sep_flowers2
+```  
+
+# Exercise 8 - Re-unite the data frame you separated from the flowers2 exercise. Use a comma for the separator.  
+
+```{r}
+unite_flowers2 <- sep_flowers2 %>% unite(`Flowers,Intensity`, Flowers, Intensity, sep = ",")
+
+unite_flowers2
+```  
+
+# Exercise 9 - In the following dataset, turn the implicit missing values to explicit.  
+
+```{r}
+output <- tibble(
+      treatment   = c("a", "b", "a", "c", "b"),
+      gender   = factor(c("M", "F", "F", "M", "M"), levels = c("M", "F", "O")),
+      return = c(1.5, 0.75,  0.5,  1.8,  NA)
+    )
+    output
+
+output %>% complete(treatment, gender)
+```
+
+# Exercise 10 - Use pivot_longer() to put the days all in one column. Then, rearrange the data.
+
+```{r}
+weather <- read_csv("https://raw.githubusercontent.com/JaneWall/data_STAT412612/master/weather.csv")
+
+weather_tidy <- weather %>% pivot_longer(cols = starts_with("d"), names_to = "day", names_pattern = "d(.*)", values_to = "value") %>% na.omit()
+
+weather_tidy
+
+weather4 <- weather_tidy %>% pivot_wider(names_from = element, values_from = value)
+
+summary(weather4)
+```  
+
+# Exercise 11 - Tidy the billboard dataset (built-in)
+
+* First gather up all the week entries into a row for each week for each song (where there is an entry)
+
+* Then, convert the week variable to a number and figure out the date corresponding to each week on the chart
+
+* Sort the data by artist, track and week.
+
+```{r}
+billboard %>% pivot_longer(cols = starts_with("wk"), names_to = "week", names_pattern = "wk(.*)", values_to = "rank") %>% na.omit() %>% select(artist, track, week, rank, date.entered)
+
+billboard$week <- as.integer(billboard$week)
+```
