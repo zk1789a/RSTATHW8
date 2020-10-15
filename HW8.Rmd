@@ -130,6 +130,23 @@ summary(weather4)
 
 ```{r}
 billboard %>% pivot_longer(cols = starts_with("wk"), names_to = "week", names_pattern = "wk(.*)", values_to = "rank") %>% na.omit() %>% select(artist, track, week, rank, date.entered)
+```
 
-billboard$week <- as.integer(billboard$week)
+# Exercise 12 - Do the same with the built-in dataset anscombe.
+
+```{r}
+anscombe %>%
+   pivot_longer(everything(),
+                names_to = c(".value", "set"),
+                names_pattern = "(.)(.)"
+  )
+```
+# Exercise 13 - 
+
+```{r}
+world_bank_pop_tidy <- world_bank_pop %>% pivot_longer(cols = c(`2000`:`2017`), names_to = "year", values_to = "value")
+
+world_bank_pop_tidy
+
+world_bank_pop_tidy %>% group_by(indicator) %>% count()
 ```
